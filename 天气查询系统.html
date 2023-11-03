@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>城市天气查询</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    .jumbotron {
+        background: linear-gradient(to bottom, #3498db, #207cca);
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group {
+        margin: 20px 0;
+    }
+
+    #cityInput {
+        border: 2px solid #3498db;
+        border-radius: 5px;
+    }
+
+    #getWeatherButton {
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    #getWeatherButton:hover {
+        background-color: #207cca;
+    }
+
+    #weatherInfo {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    #cityName {
+        font-size: 24px;
+    }
+
+    #weatherDescription, #temperature {
+        font-size: 18px;
+    }
+</style>
+
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">城市天气查询</h1>
+        </div>
+        <div class="form-group">
+            <label for="cityInput">输入城市名称:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="cityInput" placeholder="输入城市">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="getWeatherButton">获取天气<tton>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4" id="weatherInfo">
+            <h2 id="cityName" class="mb-3"></h2>
+            <p id="weatherDescription"></p>
+            <p id="temperature"></p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#getWeatherButton').click(function () {
+                const city = $('#cityInput').val();
+                $.ajax({
+                    type: 'get',
+                    url: `https://restapi.amap.com/v3/weather/weatherInfo?key=bef667229c1b8e36fe571b7fe9d2ad65&city=${city}`,
+                    contentType: "application/json",
+                    success: function (data) {
+                        if (data.status === '1') {
+                            const { weather, temperature } = data.lives[0];
+                            console.log(data);
+                            $('#cityName').text(city);
+                            $('#weatherDescription').text('天气: ' + weather);
+                            $('#temperature').text('温度: ' + temperature + '℃');
+                        } else {
+                            $('#cityName').text('未找到城市');
+                            $('#weatherDescription').text('');
+                            $('#temperature').text('');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+<ml>
